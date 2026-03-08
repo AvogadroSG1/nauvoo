@@ -68,6 +68,6 @@ uv run nauvoo
 |----------|---------|---------|
 | `OBSIDIAN_DOCS_DIR` | _(required)_ | Directory of Ring Station markdown files |
 | `GOOGLE_CLIENT_SECRETS` | `~/Keys/client_secrets.json` | OAuth client secrets |
-| `GOOGLE_TOKEN_FILE` | `~/ObsidianNotes/.../token.json` | OAuth token |
+| `GOOGLE_TOKEN_FILE` | `~/.config/nauvoo/token.json` | OAuth token |
 | `NAUVOO_POLL_INTERVAL` | `30` | Polling interval in seconds |
 | `LOG_LEVEL` | `INFO` | Logging verbosity |
