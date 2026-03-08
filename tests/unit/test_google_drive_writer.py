@@ -13,7 +13,7 @@ def _make_adapter() -> GoogleDriveWriterAdapter:
 
 def test_post_reply_calls_api():
     adapter = _make_adapter()
-    replies_mock = adapter._drive.comments.return_value.replies.return_value
+    replies_mock = adapter._drive.replies.return_value
     replies_mock.create.return_value.execute.return_value = {"id": "reply99"}
 
     result = adapter.post_reply(file_id="fileXYZ", comment_id="cmnt1", body="My answer")
