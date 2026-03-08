@@ -8,7 +8,7 @@ Usage:
 Environment variables:
     OBSIDIAN_DOCS_DIR: Path to Obsidian vault directory containing Ring Station docs (REQUIRED)
     GOOGLE_CLIENT_SECRETS: Path to OAuth client_secrets.json (default: ~/Keys/client_secrets.json)
-    GOOGLE_TOKEN_FILE: Path to OAuth token.json (default: ~/ObsidianNotes/Work/.../token.json)
+    GOOGLE_TOKEN_FILE: Path to OAuth token.json (default: ~/.config/nauvoo/token.json)
     NAUVOO_POLL_INTERVAL: Poll interval in seconds (default: 30)
     LOG_LEVEL: Logging verbosity (default: INFO)
 """
@@ -24,16 +24,7 @@ from pathlib import Path
 logger = logging.getLogger("nauvoo.daemon")
 
 DEFAULT_CLIENT_SECRETS = Path.home() / "Keys" / "client_secrets.json"
-DEFAULT_TOKEN_FILE = (
-    Path.home()
-    / "ObsidianNotes"
-    / "Work"
-    / "02-Technical"
-    / "Code"
-    / "GoogleDataExtraction"
-    / "credentials"
-    / "token.json"
-)
+DEFAULT_TOKEN_FILE = Path.home() / ".config" / "nauvoo" / "token.json"
 
 GOOGLE_SCOPES = [
     "https://www.googleapis.com/auth/drive",  # read + write for comments/replies
