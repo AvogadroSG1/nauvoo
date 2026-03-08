@@ -12,8 +12,7 @@ class GoogleDriveWriterAdapter(DriveWriterPort):
     def post_reply(self, file_id: str, comment_id: str, body: str) -> str:
         """Post a reply to an existing Drive comment. Returns the new reply ID."""
         result = (
-            self._drive.comments()
-            .replies()
+            self._drive.replies()
             .create(
                 fileId=file_id,
                 commentId=comment_id,
