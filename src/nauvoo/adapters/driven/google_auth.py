@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
 
@@ -13,8 +14,8 @@ class GoogleAuthAdapter:
         token_file: Path,
         scopes: list[str],
     ) -> None:
-        self._client_secrets_file = client_secrets_file
-        self._token_file = token_file
+        self._client_secrets_file = Path(client_secrets_file)
+        self._token_file = Path(token_file)
         self._scopes = scopes
 
     def get_credentials(self):
@@ -24,6 +25,12 @@ class GoogleAuthAdapter:
 
         creds = None
         if self._token_file.exists():
+            has_scopes, missing = self._check_scopes()
+            if not has_scopes:
+                raise ValueError(
+                    f"Token missing required scopes: {missing}. "
+                    f"Delete {self._token_file} and re-run to authorize."
+                )
             creds = Credentials.from_authorized_user_file(
                 str(self._token_file), self._scopes
             )
@@ -33,6 +40,10 @@ class GoogleAuthAdapter:
                 creds.refresh(Request())
                 logger.info("Google credentials refreshed")
             else:
+                if not self._client_secrets_file.exists():
+                    raise FileNotFoundError(
+                        f"OAuth client secrets not found at {self._client_secrets_file}"
+                    )
                 flow = InstalledAppFlow.from_client_secrets_file(
                     str(self._client_secrets_file), self._scopes
                 )
@@ -43,3 +54,14 @@ class GoogleAuthAdapter:
             self._token_file.write_text(creds.to_json())
 
         return creds
+
+    def _check_scopes(self) -> tuple[bool, set[str]]:
+        """Check if token has all required scopes."""
+        try:
+            token_data = json.loads(self._token_file.read_text())
+            granted = set(token_data.get("scopes", []))
+            required = set(self._scopes)
+            missing = required - granted
+            return len(missing) == 0, missing
+        except (json.JSONDecodeError, OSError):
+            return False, set(self._scopes)
