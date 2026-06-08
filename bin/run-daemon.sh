@@ -7,5 +7,5 @@ export GOOGLE_TOKEN_FILE="$HOME/.config/nauvoo/token.json"
 export NAUVOO_POLL_INTERVAL=30
 export LOG_LEVEL=INFO
 
-cd /Users/poconnor/nauvoo
+cd "$(dirname "$0")/.."
 exec /opt/homebrew/bin/uv run nauvoo
